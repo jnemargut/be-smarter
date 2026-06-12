@@ -43,7 +43,11 @@ Every run above G0 appends to `.thinking/trace.json`: what was considered, what 
 
 Human-readable decision pages are rendered from the trace only when you step in (or later, if you ask to "show the thinking"). Nobody pays for pages nobody reads.
 
-Depth flags: `--quick` caps the gear, `--deep` floors it, `--gear=N` sets it.
+You can also control how deep the thinking goes. Normally the triage score decides (a "gear" from G0, just answer, to G4, the full treatment). Three flags override it:
+
+- `--quick`: stay shallow no matter what the score says. Good when you want a fast take on something the rubric would deliberate over.
+- `--deep`: think hard no matter what the score says. Good when a task looks routine but you know it isn't.
+- `--gear=2`: pin an exact level (0 to 4) yourself.
 
 ## Install
 
