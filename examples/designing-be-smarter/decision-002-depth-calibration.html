@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 2 — Depth Calibration</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --yellow:#fbbf24; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .context { background:rgba(108,99,255,0.08); border:1px solid var(--accent); border-radius:10px; padding:14px 20px; font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .context b { color:var(--ink); }
+  .section-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:48px 0 16px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .research { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; }
+  .research ul { list-style:none; }
+  .research li { padding:10px 0; border-bottom:1px solid var(--border); font-size:15px; }
+  .research li:last-child { border-bottom:none; }
+  .research b { color:var(--ink); }
+  .research .src { color:var(--accent); font-size:13px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:20px; margin-bottom:8px; }
+  .option .sub { color:var(--muted); font-size:14px; margin-bottom:18px; }
+  .gears { background:var(--card2); border-radius:10px; padding:16px; margin-bottom:18px; font-size:13px; color:var(--muted); }
+  .gear { display:flex; gap:10px; padding:5px 0; align-items:baseline; }
+  .gear .g { font-family:ui-monospace, monospace; color:var(--accent); font-weight:700; min-width:30px; }
+  .pros-cons { font-size:14px; }
+  .pros-cons p { margin:6px 0; }
+  .pro::before { content:"+ "; color:var(--green); font-weight:700; }
+  .con::before { content:"− "; color:var(--red); font-weight:700; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  th { background:var(--card2); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+  td:first-child { color:var(--muted); font-weight:600; }
+  .good { color:var(--green); } .mid { color:var(--yellow); } .bad { color:var(--red); }
+  .reccol { background:rgba(108,99,255,0.07); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Decision 2 of 6 · The Throttle</div>
+  <h1>How does the skill decide how much thinking a task deserves?</h1>
+  <p class="lede">Your own complaint about decision-kit — "it's time consuming" — is the adoption killer this decision exists to fix. Run the full double diamond on "rename this variable" and /be-smarter becomes /be-slower. The research says miscalibrated depth isn't just slow, it's <i>wrong</i>: easy tasks degrade under deliberation.</p>
+  <div class="context"><b>Builds on Decision 1 (double diamond):</b> the protocol has natural collapse points — full two diamonds, solution-diamond only, question-scaffold only, or just answer. Calibration picks among them.</div>
+
+  <div class="section-title">Research Context</div>
+  <div class="research">
+    <ul>
+      <li><b>"Easy inputs rarely require expensive reasoning and can even degrade under excessive deliberation; genuinely difficult inputs benefit disproportionately."</b> The marginal value of thinking is highly query-dependent — this is the consensus finding of the adaptive test-time-compute literature. <span class="src">Reasoning on a Budget survey (arXiv 2507.02076), CODA (2603.08659)</span></li>
+      <li><b>Models both overthink AND underthink, measurably.</b> OptimalThinkingBench exists precisely because models can't be trusted to self-pace without structure: thinking models overthink simple queries; non-thinking models underthink hard ones. <span class="src">arXiv 2508.13141</span></li>
+      <li><b>Difficulty can be assessed cheaply, without training.</b> Training-free difficulty proxies derived from the generation process itself effectively allocate budget across queries — a cheap upfront triage is a validated pattern, not overhead. <span class="src">OpenReview ztGHhyicWs, BEST-Route (2506.22716)</span></li>
+      <li><b>Stakes and reversibility are the practitioner's triage axes.</b> The "one-way vs two-way door" heuristic (Bezos) is the de-facto standard for how much deliberation a decision deserves: irreversible + high-stakes earns the full treatment; reversible + cheap should be decided fast and corrected later.</li>
+      <li><b>Decision-kit already validated user-facing depth control.</b> /overdecide and /underdecide exist because one size didn't fit — but they put the burden on the user to know the right depth before thinking starts, which is exactly what's hard to know upfront.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">The gear range (shared by all options below)</div>
+  <div class="research" style="font-size:14px">
+    <div class="gear"><span class="g">G0</span>Just answer — protocol skipped, one line states why (trivial, factual, reversible)</div>
+    <div class="gear"><span class="g">G1</span>Question scaffold — expert questions + assumptions ledger, single converge</div>
+    <div class="gear"><span class="g">G2</span>Solution diamond only — framing accepted, decisions + options + tradeoffs run</div>
+    <div class="gear"><span class="g">G3</span>Full double diamond — framing challenged, then solution space</div>
+    <div class="gear"><span class="g">G4</span>Double diamond + adversarial escalation on the hardest calls</div>
+  </div>
+
+  <div class="section-title">Options</div>
+  <div class="options">
+
+    <div class="option">
+      <div class="opt-letter">A</div>
+      <h3>Model self-selects, no ceremony</h3>
+      <p class="sub">A one-paragraph instruction: "match depth to the task; here's the gear range." The model picks a gear silently and runs. No rubric, no logged score.</p>
+      <div class="pros-cons">
+        <p class="pro">Zero overhead; reads naturally in a skill file</p>
+        <p class="pro">Frontier models are decent at coarse difficulty judgment</p>
+        <p class="con">OptimalThinkingBench's whole finding: unstructured self-pacing miscalibrates both directions</p>
+        <p class="con">Unauditable — when output is shallow you can't see why it chose G1</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">B</div>
+      <h3>User flags only</h3>
+      <p class="sub">Depth is the human's job: <code style="background:#1a1a26;padding:1px 6px;border-radius:4px">/be-smarter --quick|--deep</code> (mirroring /underdecide and /overdecide). Default is G3. No model judgment involved.</p>
+      <div class="pros-cons">
+        <p class="pro">Fully predictable; user always knows what they bought</p>
+        <p class="pro">Familiar pattern from decision-kit's modifier orchestrators</p>
+        <p class="con">Requires knowing the right depth before the thinking that would reveal it</p>
+        <p class="con">Default-G3 on everything re-creates the "time consuming" complaint verbatim</p>
+      </div>
+    </div>
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">C</div>
+      <h3>Scored triage + mid-task escalation</h3>
+      <p class="sub">A fixed-cost Phase 0: score the task on <b>stakes × ambiguity × reversibility × novelty</b> (1–3 each), map the total to a gear, and log the one-line scoring so it's auditable. Escalate a gear mid-task if tripwires fire (a load-bearing assumption found false, options surprisingly close, success criteria unclear). User flags override everything.</p>
+      <div class="gears">
+        <div class="gear"><span class="g">0</span>Score: stakes 2 · ambiguity 3 · reversibility 1 · novelty 2 = 8 → G3</div>
+        <div class="gear"><span class="g">⚡</span>Tripwire: "assumption X is false" → escalate G2→G3, log it</div>
+        <div class="gear"><span class="g">⚑</span>--quick / --deep / --gear=N override the score</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Cheap-triage-then-allocate is the validated pattern from the routing literature</p>
+        <p class="pro">Auditable: the score line explains every depth choice after the fact</p>
+        <p class="pro">Escalation catches the tasks that look easy until you start</p>
+        <p class="con">The rubric is a new thing to design well — bad weights = systematic miscalibration</p>
+        <p class="con">Slight fixed cost on every invocation (a few sentences)</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Always full protocol</h3>
+      <p class="sub">No calibration. You invoked /be-smarter; you get the double diamond. Trivial tasks shouldn't be invoking the skill at all.</p>
+      <div class="pros-cons">
+        <p class="pro">Simplest possible spec; nothing to tune</p>
+        <p class="pro">Invocation itself is arguably the depth signal</p>
+        <p class="con">Dies the moment the skill is set always-on (CLAUDE.md) — which is exactly the "make any model smarter by default" ambition</p>
+        <p class="con">Easy tasks measurably degrade under deliberation — this option ignores the central finding</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Comparison</div>
+  <table>
+    <tr><th>Dimension</th><th>A · Self-select</th><th>B · User flags</th><th class="reccol">C · Scored triage ★</th><th>D · Always full</th></tr>
+    <tr><td>Prevents overthinking</td><td class="mid">Sometimes</td><td class="mid">Only if user knows</td><td class="reccol good">By design</td><td class="bad">Never</td></tr>
+    <tr><td>Prevents underthinking</td><td class="mid">Sometimes</td><td class="mid">Only if user knows</td><td class="reccol good">Tripwires escalate</td><td class="good">Always deep</td></tr>
+    <tr><td>Auditable after the fact</td><td class="bad">No</td><td class="good">Trivially</td><td class="reccol good">Score line logged</td><td class="good">Trivially</td></tr>
+    <tr><td>Survives always-on usage</td><td class="mid">Sort of</td><td class="bad">No — needs a flag each time</td><td class="reccol good">Yes — G0 exists</td><td class="bad">No</td></tr>
+    <tr><td>Overhead per invocation</td><td class="good">None</td><td class="good">None</td><td class="reccol mid">~3 sentences</td><td class="good">None</td></tr>
+    <tr><td>Research alignment</td><td class="bad">Contradicts OTB finding</td><td class="mid">Neutral</td><td class="reccol good">Matches routing literature</td><td class="bad">Contradicts central finding</td></tr>
+    <tr><td>User control preserved</td><td class="bad">None</td><td class="good">Total</td><td class="reccol good">Flags override score</td><td class="bad">None</td></tr>
+  </table>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code> — or add <code>because…</code> / <code>but…</code>, ask for <code>more options</code>, or describe your own approach.<br><br>
+    Recommendation: <b style="color:var(--ink)">C</b>. It's the only option that fixes the "time consuming" complaint AND the underthinking risk, with a paper trail. B's flags fold in as overrides, so the user keeps total control without carrying the calibration burden. The rubric design risk is real but bounded — it ships in the spec where contributors can tune it.
+  </div>
+</div>
+</body>
+</html>

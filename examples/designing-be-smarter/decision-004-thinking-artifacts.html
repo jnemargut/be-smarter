@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 4 — Thinking Artifacts</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --yellow:#fbbf24; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .context { background:rgba(108,99,255,0.08); border:1px solid var(--accent); border-radius:10px; padding:14px 20px; font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .context b { color:var(--ink); }
+  .section-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:48px 0 16px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .research { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; }
+  .research ul { list-style:none; }
+  .research li { padding:10px 0; border-bottom:1px solid var(--border); font-size:15px; }
+  .research li:last-child { border-bottom:none; }
+  .research b { color:var(--ink); }
+  .research .src { color:var(--accent); font-size:13px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:20px; margin-bottom:8px; }
+  .option .sub { color:var(--muted); font-size:14px; margin-bottom:18px; }
+  .mock { background:var(--card2); border-radius:10px; padding:14px 16px; margin-bottom:18px; font-family:ui-monospace, "SF Mono", monospace; font-size:11.5px; line-height:1.65; color:var(--muted); white-space:pre; overflow-x:auto; }
+  .mock .hl { color:var(--green); }
+  .pros-cons { font-size:14px; }
+  .pros-cons p { margin:6px 0; }
+  .pro::before { content:"+ "; color:var(--green); font-weight:700; }
+  .con::before { content:"− "; color:var(--red); font-weight:700; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  th { background:var(--card2); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+  td:first-child { color:var(--muted); font-weight:600; }
+  .good { color:var(--green); } .mid { color:var(--yellow); } .bad { color:var(--red); }
+  .reccol { background:rgba(108,99,255,0.07); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Decision 4 of 6 · The Record</div>
+  <h1>What does the thinking leave behind?</h1>
+  <p class="lede">You've already ruled one thing: human-readable decision pages only matter when a human is in the loop. The open question is what — if anything — the thinking records when nobody's watching, and how the review dial position gets the material it needs to render.</p>
+  <div class="context"><b>Builds on Decisions 1–3:</b> the double diamond produces structured state (triage score, framings, decisions, picks, assumptions); the review position needs that state batched at the end; production interrupt patterns need it checkpointed.</div>
+
+  <div class="section-title">Research Context</div>
+  <div class="research">
+    <ul>
+      <li><b>Audit trails must capture the "why," not just the "what."</b> The emerging standard for agent logging records the reasoning: which considerations fired, how competing factors were weighed, what was rejected — exactly the protocol's intermediate state. <span class="src">IETF draft-sharif-agent-audit-trail, Streamkap decision traces</span></li>
+      <li><b>Checkpoint-resume requires durable state.</b> The HITL interrupt pattern (Decision 3) is checkpoint → wait → resume; a trace file IS the checkpoint. Without one, the review position has nothing to render and interrupted runs restart from scratch. <span class="src">Redis HITL patterns, TRiSM survey</span></li>
+      <li><b>Traces enable replay and post-hoc trust.</b> Schemas that capture context, options weighed, and rationale per step allow faithful replay and after-the-fact audit — the difference between "trust me" and "check me." <span class="src">fast.io audit-trail guide, AISAC</span></li>
+      <li><b>Decision-kit's composability runs on decisions.json.</b> Action skills (/brief, /game-plan, /challenge) read prior decision records. A trace whose decision entries are schema-compatible gets the whole action-skill ecosystem for free — /challenge could audit a headless /be-smarter run.</li>
+      <li><b>Cost asymmetry favors lazy rendering.</b> The HTML pages are ~95% of decision-kit's per-decision token cost; the underlying decision data is the cheap part. Recording data always + rendering views only when a human asks inverts the cost structure correctly.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Options</div>
+  <div class="options">
+
+    <div class="option">
+      <div class="opt-letter">A</div>
+      <h3>No artifact</h3>
+      <p class="sub">Thinking happens in context; the answer is the only output. Nothing written to disk, ever.</p>
+      <div class="mock">$ /be-smarter refactor the auth module
+<span class="hl">→ [thinks internally] → answer</span>
+(nothing on disk)</div>
+      <div class="pros-cons">
+        <p class="pro">Zero overhead, zero files to explain or clean up</p>
+        <p class="pro">Maximally portable — works in any host with no filesystem</p>
+        <p class="con">Review dial position is impossible — nothing to review</p>
+        <p class="con">No audit, no resume, no compounding across runs</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">B</div>
+      <h3>Reasoning appendix in the response</h3>
+      <p class="sub">No files — but every answer ends with a compact visible block: gear chosen + why, the framing converged on, key picks with one-line reasoning, assumptions that matter.</p>
+      <div class="mock">…answer…
+
+— Thinking trace —
+gear: G3 (stakes 3·ambig 2·rev 2·novel 1 = 8)
+framing: "slow queries" → actually missing index strategy
+picks: composite idx (vs per-col, covering, denorm)
+assumed: read-heavy 10:1 — <span class="hl">verify</span></div>
+      <div class="pros-cons">
+        <p class="pro">Transparency with zero filesystem dependency</p>
+        <p class="pro">The human sees the why without asking</p>
+        <p class="con">Vanishes with the conversation — no audit, no compounding</p>
+        <p class="con">Review position gets a summary, not an overridable record</p>
+      </div>
+    </div>
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">C</div>
+      <h3>Machine trace always, views on demand</h3>
+      <p class="sub">Every non-G0 run appends to <code style="background:#1a1a26;padding:1px 6px;border-radius:4px">.thinking/trace.json</code>: triage score, framings considered, decisions with options/picks/reasoning (decisions.json-compatible schema), assumptions ledger, tripwires fired. A 3-line summary rides in the response. HTML pages are <b>rendered from the trace</b> only when the dial is review/full — or later, on "show me the thinking."</p>
+      <div class="mock">.thinking/trace.json   <span class="hl">← always (G1+)</span>
+  { gear, framing: {considered, chosen, criteria},
+    decisions: [ {options, chosen, reasoning} ],  ← decisions.json-compatible
+    assumptions, tripwires }
+review/full or "show me the thinking"
+  → pages rendered <span class="hl">from the trace</span>, lazily</div>
+      <div class="pros-cons">
+        <p class="pro">Trace = checkpoint = review material = audit trail, one mechanism</p>
+        <p class="pro">decisions.json compatibility → /challenge, /brief, /game-plan work on headless runs</p>
+        <p class="pro">Pages become a view, not a cost — your exact "only when human" requirement</p>
+        <p class="con">A dotfile to document, gitignore, and keep schema-stable</p>
+        <p class="con">Filesystem dependency — needs a degrade story for file-less hosts (fall back to B)</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Full decision-kit artifacts, always</h3>
+      <p class="sub">Pages + decisions.json every run, human or not — maximum continuity with decision-kit; the artifacts simply go unopened in headless mode.</p>
+      <div class="mock">.decisions/be-smarter-run/
+  framing.html, decision-001.html, …   <span class="hl">← rendered even headless</span>
+  decisions.json</div>
+      <div class="pros-cons">
+        <p class="pro">Zero new schema work — it's decision-kit's exact format</p>
+        <p class="pro">Anything is reviewable at any time</p>
+        <p class="con">Pages are ~95% of the token cost, paid on every headless run for nobody</p>
+        <p class="con">Directly contradicts your stated requirement</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Comparison</div>
+  <table>
+    <tr><th>Dimension</th><th>A · Nothing</th><th>B · Appendix</th><th class="reccol">C · Trace + lazy views ★</th><th>D · Full pages always</th></tr>
+    <tr><td>Supports review dial position</td><td class="bad">Impossible</td><td class="mid">Summary only</td><td class="reccol good">Native — trace is the material</td><td class="good">Yes</td></tr>
+    <tr><td>Audit / replay</td><td class="bad">None</td><td class="bad">Ephemeral</td><td class="reccol good">Durable, queryable</td><td class="good">Durable, heavy</td></tr>
+    <tr><td>Headless token cost</td><td class="good">Zero</td><td class="good">~3 lines</td><td class="reccol good">Data only (~cheap)</td><td class="bad">Full page rendering</td></tr>
+    <tr><td>Compounding across runs</td><td class="bad">No</td><td class="bad">No</td><td class="reccol good">Traces readable by later runs</td><td class="good">Yes</td></tr>
+    <tr><td>Decision-kit ecosystem compat</td><td class="bad">None</td><td class="bad">None</td><td class="reccol good">Schema-compatible decisions</td><td class="good">Identical format</td></tr>
+    <tr><td>File-less host portability</td><td class="good">Perfect</td><td class="good">Perfect</td><td class="reccol mid">Degrades to B</td><td class="bad">Poor</td></tr>
+    <tr><td>Matches "pages only when human"</td><td class="good">Trivially</td><td class="good">Yes</td><td class="reccol good">Exactly</td><td class="bad">No</td></tr>
+  </table>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code> — or add <code>because…</code> / <code>but…</code>, ask for <code>more options</code>, or describe your own approach.<br><br>
+    Recommendation: <b style="color:var(--ink)">C</b>, with B folded in as its response summary and as the documented fallback on file-less hosts. One mechanism serves four needs — checkpoint for interrupts, material for review, audit trail, and compounding memory — and the decisions.json-compatible schema means decision-kit's action skills can consume headless /be-smarter runs unchanged.
+  </div>
+</div>
+</body>
+</html>

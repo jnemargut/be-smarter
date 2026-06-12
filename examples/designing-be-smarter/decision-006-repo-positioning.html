@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 6 — Repo &amp; Positioning</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --yellow:#fbbf24; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .context { background:rgba(108,99,255,0.08); border:1px solid var(--accent); border-radius:10px; padding:14px 20px; font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .context b { color:var(--ink); }
+  .section-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:48px 0 16px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .research { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; }
+  .research ul { list-style:none; }
+  .research li { padding:10px 0; border-bottom:1px solid var(--border); font-size:15px; }
+  .research li:last-child { border-bottom:none; }
+  .research b { color:var(--ink); }
+  .research .src { color:var(--accent); font-size:13px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:20px; margin-bottom:8px; }
+  .option .sub { color:var(--muted); font-size:14px; margin-bottom:18px; }
+  .mock { background:var(--card2); border-radius:10px; padding:14px 16px; margin-bottom:18px; font-family:ui-monospace, "SF Mono", monospace; font-size:11.5px; line-height:1.65; color:var(--muted); white-space:pre; overflow-x:auto; }
+  .mock .hl { color:var(--green); }
+  .pros-cons { font-size:14px; }
+  .pros-cons p { margin:6px 0; }
+  .pro::before { content:"+ "; color:var(--green); font-weight:700; }
+  .con::before { content:"− "; color:var(--red); font-weight:700; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  th { background:var(--card2); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+  td:first-child { color:var(--muted); font-weight:600; }
+  .good { color:var(--green); } .mid { color:var(--yellow); } .bad { color:var(--red); }
+  .reccol { background:rgba(108,99,255,0.07); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Decision 6 of 6 · The Home</div>
+  <h1>Where does /be-smarter live, and what is it to decision-kit?</h1>
+  <p class="lede">You asked for a new repo with decision-kit's license and contribution method. The real decision underneath: what's the relationship between the two projects — and does the name hold up?</p>
+  <div class="context"><b>Builds on Decisions 1–5:</b> the skill is standard-conformant and headless-first — a different premise from decision-kit's judgment-first gate. The repo structure should make that difference legible, not blur it.</div>
+
+  <div class="section-title">Research Context</div>
+  <div class="research">
+    <ul>
+      <li><b>The name is free.</b> No meaningful "be-smarter" collisions on GitHub (top search hits are unrelated). The skill-command form <code style="background:#1a1a26;padding:2px 6px;border-radius:4px">/be-smarter</code> is imperative, memorable, and states the promise — consistent with decision-kit's verb-style commands (/decide, /strategize, /excavate).</li>
+      <li><b>Decision-kit's scaffolding is designed to be portable.</b> Apache 2.0 + CODE_OF_CONDUCT + CONTRIBUTING (issue-first, one-focused-PR, dogfood-your-.decisions) + SPEC.md with explicit rules + examples/ — nothing in it is decision-kit-specific. Porting is a copy-and-edit, not a design effort. <span class="src">decision-kit repo</span></li>
+      <li><b>The philosophical difference is real and worth preserving.</b> Decision-kit's SPEC forbids skills that "bypass the decision gate" — human judgment is the point. /be-smarter's default is headless. Housing a gate-bypassing skill inside the repo whose spec forbids gate-bypassing creates a contradiction contributors will trip on.</li>
+      <li><b>The Agent Skills spec rewards standalone skill repos.</b> Install is "copy this directory into your host's skills folder" — a repo whose root IS the skill directory makes that one command. Monorepos add a path layer to every install instruction. <span class="src">Agent Skills spec, Codex skills docs</span></li>
+      <li><b>Cross-pollination needs only two links:</b> decision-kit's /decide orchestrator can route "make this smarter"-shaped intents to /be-smarter when installed; /be-smarter's review mode emits decisions.json-compatible traces that decision-kit's action skills consume (Decision 4). Integration is protocol-level, not repo-level.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Options</div>
+  <div class="options">
+
+    <div class="option">
+      <div class="opt-letter">A</div>
+      <h3>Inside decision-kit</h3>
+      <p class="sub">A new top-level <code style="background:#1a1a26;padding:1px 6px;border-radius:4px">meta/be-smarter/</code> category in the existing repo. One community, shared scaffolding, zero setup.</p>
+      <div class="mock">decision-kit/
+├── thinking/ · action/ · orchestrator/
+└── meta/
+    └── be-smarter/   <span class="hl">← new category</span></div>
+      <div class="pros-cons">
+        <p class="pro">Zero scaffolding work; one community and issue tracker</p>
+        <p class="pro">/decide routing is in-repo and trivial</p>
+        <p class="con">Contradicts the SPEC's no-gate-bypass rule in its own house</p>
+        <p class="con">Buries the 32-tool standalone story under decision-kit's Claude-centric framing — and ignores your explicit ask</p>
+      </div>
+    </div>
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">B</div>
+      <h3>Sibling repo: jnemargut/be-smarter</h3>
+      <p class="sub">A standalone repo whose root is the installable skill, with decision-kit's governance ported verbatim (Apache 2.0, CONTRIBUTING, CODE_OF_CONDUCT, SPEC pattern, examples/). READMEs cross-link as a family: "decision-kit puts you in the loop; be-smarter thinks that way even when you're not."</p>
+      <div class="mock">be-smarter/            <span class="hl">← repo root = skill dir</span>
+├── SKILL.md           (host-neutral, spec-conformant)
+├── PROTOCOL.md        (paste-anywhere version)
+├── references/        (triage rubric, trace schema, dial)
+├── examples/          (incl. this .decisions/ run)
+├── SPEC.md · CONTRIBUTING.md · LICENSE (Apache 2.0)
+└── README.md          (install = one cp per host)</div>
+      <div class="pros-cons">
+        <p class="pro">Matches your ask exactly; one-command install per host</p>
+        <p class="pro">Each repo keeps a coherent philosophy — no spec contradiction</p>
+        <p class="pro">Standalone story for the 32-tool audience who've never heard of decision-kit</p>
+        <p class="con">Second issue tracker, second README to keep current</p>
+        <p class="con">Governance files duplicated (drift risk — mitigate by porting verbatim and rarely touching)</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">C</div>
+      <h3>Umbrella org for a kit family</h3>
+      <p class="sub">Create a GitHub org (e.g. <code style="background:#1a1a26;padding:1px 6px;border-radius:4px">decisionkit-ai</code>), move decision-kit in, add be-smarter beside it, share org-level governance and a family brand.</p>
+      <div class="mock">decisionkit-ai/        <span class="hl">← org</span>
+├── decision-kit
+├── be-smarter
+└── .github/           (shared governance)</div>
+      <div class="pros-cons">
+        <p class="pro">Cleanest long-term home if more kits are coming</p>
+        <p class="pro">Org-level community files end the duplication problem</p>
+        <p class="con">Moving decision-kit breaks existing links/installs for a 1-star repo's benefit</p>
+        <p class="con">Brand infrastructure before product traction — ceremony first, users later</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Fork decision-kit and trim</h3>
+      <p class="sub">Literal interpretation of "same contribution method": fork the repo, delete everything but scaffolding, build be-smarter in the shell. History and governance carry over automatically.</p>
+      <div class="mock">be-smarter/  (fork of decision-kit)
+├── [decision-kit history preserved]
+└── everything deleted except governance</div>
+      <div class="pros-cons">
+        <p class="pro">Governance fidelity is automatic, not manual</p>
+        <p class="con">GitHub marks it "forked from decision-kit" forever — wrong signal for a standalone product</p>
+        <p class="con">Irrelevant history pollutes blame/log; forks get worse discovery treatment</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Comparison</div>
+  <table>
+    <tr><th>Dimension</th><th>A · Inside kit</th><th class="reccol">B · Sibling repo ★</th><th>C · Umbrella org</th><th>D · Fork + trim</th></tr>
+    <tr><td>Matches your stated ask</td><td class="bad">No</td><td class="reccol good">Exactly</td><td class="mid">Beyond it</td><td class="mid">Technically</td></tr>
+    <tr><td>Philosophical coherence</td><td class="bad">Spec contradiction</td><td class="reccol good">Clean per repo</td><td class="good">Clean</td><td class="good">Clean</td></tr>
+    <tr><td>One-command install story</td><td class="mid">Path-buried</td><td class="reccol good">Root = skill dir</td><td class="good">Same as B</td><td class="good">Same as B</td></tr>
+    <tr><td>Setup cost now</td><td class="good">None</td><td class="reccol good">Hours (copy + edit)</td><td class="bad">Org migration</td><td class="good">Minutes</td></tr>
+    <tr><td>Standalone discovery</td><td class="bad">Hidden inside kit</td><td class="reccol good">Full repo identity</td><td class="good">Full + family</td><td class="bad">"Forked from" stigma</td></tr>
+    <tr><td>Governance drift risk</td><td class="good">None</td><td class="reccol mid">Low — port verbatim</td><td class="good">Org-level files</td><td class="good">None</td></tr>
+  </table>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code> — or add <code>because…</code> / <code>but…</code>, ask for <code>more options</code>, or describe your own approach.<br><br>
+    Recommendation: <b style="color:var(--ink)">B</b> — <code>jnemargut/be-smarter</code>, keeping the /be-smarter name (free on GitHub, imperative like the kit's other commands). Port governance verbatim, cross-link the READMEs as a family, and let the two integration seams (orchestrator routing in, decisions.json-compatible traces out) do the coupling. C remains the natural evolution if a third kit ever appears — nothing in B blocks it.
+  </div>
+</div>
+</body>
+</html>

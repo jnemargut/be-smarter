@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 5 — Portability</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --yellow:#fbbf24; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .context { background:rgba(108,99,255,0.08); border:1px solid var(--accent); border-radius:10px; padding:14px 20px; font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .context b { color:var(--ink); }
+  .section-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:48px 0 16px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .research { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; }
+  .research ul { list-style:none; }
+  .research li { padding:10px 0; border-bottom:1px solid var(--border); font-size:15px; }
+  .research li:last-child { border-bottom:none; }
+  .research b { color:var(--ink); }
+  .research .src { color:var(--accent); font-size:13px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:20px; margin-bottom:8px; }
+  .option .sub { color:var(--muted); font-size:14px; margin-bottom:18px; }
+  .mock { background:var(--card2); border-radius:10px; padding:14px 16px; margin-bottom:18px; font-family:ui-monospace, "SF Mono", monospace; font-size:11.5px; line-height:1.65; color:var(--muted); white-space:pre; overflow-x:auto; }
+  .mock .hl { color:var(--green); }
+  .pros-cons { font-size:14px; }
+  .pros-cons p { margin:6px 0; }
+  .pro::before { content:"+ "; color:var(--green); font-weight:700; }
+  .con::before { content:"− "; color:var(--red); font-weight:700; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  th { background:var(--card2); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+  td:first-child { color:var(--muted); font-weight:600; }
+  .good { color:var(--green); } .mid { color:var(--yellow); } .bad { color:var(--red); }
+  .reccol { background:rgba(108,99,255,0.07); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Decision 5 of 6 · Reach</div>
+  <h1>What does "improves any model's thinking" mean concretely?</h1>
+  <p class="lede">"Any model" could mean any coding agent, any chat window, or any product built on an API. Each has a different delivery vehicle. The good news from research: the delivery problem mostly got solved while you weren't looking.</p>
+  <div class="context"><b>Builds on Decisions 1–4:</b> the protocol is pure text; the trace needs a filesystem; the dial needs an argument convention. Portability decides which of those are hard requirements and which degrade gracefully.</div>
+
+  <div class="section-title">Research Context</div>
+  <div class="research">
+    <ul>
+      <li><b>SKILL.md became an open standard — and it won fast.</b> Anthropic released the Agent Skills spec in December 2025; within 48 hours Microsoft (VS Code) and OpenAI (ChatGPT, Codex CLI) adopted it. By March 2026, <b>32 tools</b> — Gemini CLI, Cursor, JetBrains Junie, AWS Kiro, Block's Goose, Cline, Windsurf, OpenCode — read the same SKILL.md files. One conformant skill is now inherently cross-tool. <span class="src">paperclipped.de interoperability guide, agensi.io, developers.openai.com/codex/skills</span></li>
+      <li><b>The standard has neutral governance.</b> The Agentic AI Foundation (Linux Foundation) stewards AGENTS.md and the skills ecosystem, with 146 member orgs by Feb 2026 — betting on the standard isn't betting on Anthropic. <span class="src">agents.md, AAIF</span></li>
+      <li><b>"Copied into Codex's skills directory and it works"</b> is the documented bar — but only if the skill body avoids host-specific tool references and feature assumptions. Host-specific names (Task tool, AskUserQuestion) are where portability dies in practice. <span class="src">interoperability guide, Shibui field notes</span></li>
+      <li><b>Superpowers proved the model AND its limit.</b> Its skills run across six hosts from one directory — but its richest behaviors (subagent dispatch) silently degrade on hosts without those features. The lesson: write the core protocol against the lowest common denominator (text in, text out), feature-detect the rest. <span class="src">blog.marcnuri.com, Superpowers repo</span></li>
+      <li><b>Your own components sort cleanly by dependency:</b> the double diamond + triage + dial argument are pure text (work anywhere, even pasted into ChatGPT web); the trace file needs a filesystem (32-tool club); page rendering needs file + open (coding agents only). Decision 4 already designed the degrade path (trace → response appendix).</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Options</div>
+  <div class="options">
+
+    <div class="option">
+      <div class="opt-letter">A</div>
+      <h3>Claude Code first, port later</h3>
+      <p class="sub">Write it as a Claude Code skill like decision-kit's others; worry about other hosts when someone asks.</p>
+      <div class="mock">be-smarter/
+└── SKILL.md   <span class="hl">← Claude-flavored</span>
+(other hosts: "PRs welcome")</div>
+      <div class="pros-cons">
+        <p class="pro">Fastest to ship; matches your existing authoring muscle</p>
+        <p class="con">"Improves any model" becomes a roadmap item, not a fact</p>
+        <p class="con">Claude-specific wording costs the free 32-tool distribution for nothing</p>
+      </div>
+    </div>
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">B</div>
+      <h3>Standard-conformant, host-neutral skill</h3>
+      <p class="sub">One SKILL.md written to the open Agent Skills spec: no host-specific tool names, feature-detection for filesystem/subagents/pages with the Decision-4 degrade chain. The README documents install for the major hosts (one copy command each) and ships PROTOCOL.md — a condensed paste-anywhere version for chat surfaces.</p>
+      <div class="mock">be-smarter/
+├── SKILL.md       <span class="hl">← spec-conformant, host-neutral</span>
+├── PROTOCOL.md    <span class="hl">← paste into any chat</span>
+└── references/    (triage rubric, trace schema, dial spec)
+README: install = cp -r into any of 32 hosts' skills dir</div>
+      <div class="pros-cons">
+        <p class="pro">32 tools read it day one — "any model" is literally true for agents</p>
+        <p class="pro">PROTOCOL.md covers the no-agent case (ChatGPT web, Gemini app)</p>
+        <p class="pro">Feature-detect + degrade is already designed (Decision 4)</p>
+        <p class="con">Host-neutral wording is a discipline — needs a conformance check in CONTRIBUTING</p>
+        <p class="con">Can't lean on Claude-only niceties (subagents, AskUserQuestion) in the core path</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">C</div>
+      <h3>Protocol document first</h3>
+      <p class="sub">The repo's core artifact is PROTOCOL.md — a self-contained thinking method anyone pastes anywhere. Skill wrappers are secondary packaging in an adapters/ folder.</p>
+      <div class="mock">be-smarter/
+├── PROTOCOL.md    <span class="hl">← the product</span>
+└── adapters/
+    ├── skill/SKILL.md
+    └── system-prompt.txt</div>
+      <div class="pros-cons">
+        <p class="pro">Maximum conceptual reach — works in literally any chat box</p>
+        <p class="pro">Positions the method, not the packaging, as the contribution</p>
+        <p class="con">No install story = no habitual use; documents get read once, skills get used daily</p>
+        <p class="con">Trace/dial/triage all need an agent host anyway — the doc undersells the design</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Builder layer: system prompt + API recipe</h3>
+      <p class="sub">Target people embedding the method in products: a system-prompt block, an API cookbook, maybe a tiny wrapper lib. Coding-agent skill ships as one consumer of it.</p>
+      <div class="mock">be-smarter/
+├── system-prompt.md
+├── cookbook/ (OpenAI + Anthropic examples)
+└── skill/ (one consumer)</div>
+      <div class="pros-cons">
+        <p class="pro">Reaches models with no agent host at all</p>
+        <p class="con">Different audience (product builders), different repo DNA than decision-kit</p>
+        <p class="con">Doubles the surface to document and maintain for an unproven audience</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Comparison</div>
+  <table>
+    <tr><th>Dimension</th><th>A · Claude first</th><th class="reccol">B · Standard skill ★</th><th>C · Document first</th><th>D · Builder layer</th></tr>
+    <tr><td>"Any model" honesty</td><td class="bad">Roadmap claim</td><td class="reccol good">32 hosts + paste fallback</td><td class="good">Universal but shallow</td><td class="mid">API models only</td></tr>
+    <tr><td>Habitual daily use</td><td class="good">Claude users</td><td class="reccol good">All agent users</td><td class="bad">Read-once risk</td><td class="bad">Indirect</td></tr>
+    <tr><td>Full feature set (trace, dial)</td><td class="good">Yes</td><td class="reccol good">Yes, degrades gracefully</td><td class="bad">Mostly lost</td><td class="mid">Builder's job</td></tr>
+    <tr><td>Effort to v1</td><td class="good">Lowest</td><td class="reccol mid">Low+ (wording discipline)</td><td class="good">Low</td><td class="bad">Highest</td></tr>
+    <tr><td>Maintenance surface</td><td class="good">One file</td><td class="reccol good">One skill + one doc</td><td class="mid">Doc + adapters</td><td class="bad">Prompt + cookbook + lib</td></tr>
+    <tr><td>Decision-kit repo DNA fit</td><td class="good">Native</td><td class="reccol good">Native + standard</td><td class="mid">Different shape</td><td class="bad">Different audience</td></tr>
+  </table>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code> — or add <code>because…</code> / <code>but…</code>, ask for <code>more options</code>, or describe your own approach.<br><br>
+    Recommendation: <b style="color:var(--ink)">B</b>. The standards war already happened and one SKILL.md now reaches 32 tools — host-neutral wording is nearly free distribution. It carries C's best idea along (PROTOCOL.md in the repo for chat surfaces) without making the document the product. D can come later if builders show up asking for it.
+  </div>
+</div>
+</body>
+</html>

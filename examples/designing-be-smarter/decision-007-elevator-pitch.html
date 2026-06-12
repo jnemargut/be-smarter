@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 7 — Elevator Pitch</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:18px; margin-bottom:14px; }
+  .pitch { background:var(--card2); border-left:3px solid var(--accent); border-radius:8px; padding:18px 20px; font-size:15.5px; font-style:italic; color:var(--ink); margin-bottom:16px; }
+  .why { font-size:13.5px; color:var(--muted); }
+  .why b { color:var(--ink); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Final Decision · Positioning</div>
+  <h1>The 30-second version</h1>
+  <p class="lede">This goes at the top of the README and anywhere you describe the project. Written em-dash-free, per your repo style rule. Four angles on the same plan.</p>
+
+  <div class="options">
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">A</div>
+      <h3>Method-first (the anchoring story)</h3>
+      <div class="pitch">"Models anchor on their first idea and spend the rest of the answer defending it. /be-smarter makes any model go broad before it commits: question the framing, generate real options, weigh the tradeoffs, then converge. It calibrates how much thinking each task deserves, runs headless by default, and has a dial that puts you in the loop when you want to be one of the thinkers."</div>
+      <p class="why"><b>Why this angle:</b> names a failure every agent user has watched happen, then presents the protocol as the fix. Works standalone for the 32-tool audience that has never heard of decision-kit.</p>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">B</div>
+      <h3>Origin-first (the decision-kit story)</h3>
+      <div class="pitch">"Decision-kit made models smarter by accident: even when humans rubber-stamped every recommendation, forcing divergent-then-convergent thinking improved the output. /be-smarter extracts that engine and ships it alone. No picking a skill, no sitting through pages. Just better thinking on any task, in any of the 32 tools that read SKILL.md, with a human-in-the-loop dial when the stakes earn it."</div>
+      <p class="why"><b>Why this angle:</b> your own founding insight, told as a discovery. Great for people who know decision-kit; weaker as a cold open for strangers.</p>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">C</div>
+      <h3>Family-first (the two-sentence split)</h3>
+      <div class="pitch">"Decision-kit puts you in the loop. /be-smarter thinks that way even when you're not: the same divergent-then-convergent method, calibrated to the stakes of each task, leaving a machine-readable trace you can audit any time. Step in with one flag when a call is yours to make."</div>
+      <p class="why"><b>Why this angle:</b> crispest line of the four and positions both projects at once. Risk: leads with a product the new audience doesn't know.</p>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Outcome-first (the promise)</h3>
+      <div class="pitch">"One skill that makes your coding agent think before it codes: frame the problem, weigh real alternatives, commit with reasons, and leave a trace. Works in 32 tools. Headless by default, human-in-the-loop when you want it. Trivial tasks stay fast; hard ones finally get the deliberation they deserve."</div>
+      <p class="why"><b>Why this angle:</b> punchy and benefit-dense, reads like a tagline. Slightly oversells "coding agent" when the protocol is task-general.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code>, blend them (<code>A but end with C's last line</code>), or write your own.<br><br>
+    Recommendation: <b style="color:var(--ink)">A</b>. The anchoring failure is instantly recognizable to anyone who uses agents, it sells the method on its own merits, and it doesn't require knowing decision-kit. C's split line is worth keeping as the cross-link sentence in both READMEs regardless of which pitch wins.
+  </div>
+</div>
+</body>
+</html>

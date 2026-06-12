@@ -1,0 +1,118 @@
+{
+  "situation": "Create /be-smarter: a universal skill that gives any model decision-kit's divergent-then-convergent thinking method on any task, with an optional human-in-the-loop dial. Ship it in a new repo modeled on decision-kit (Apache 2.0, same contribution method). Human-readable decision pages render only when a human is in the loop.",
+  "created": "2026-06-12",
+  "decisions": [
+    {
+      "id": "decision-001",
+      "title": "Core thinking protocol",
+      "question": "What is the thinking protocol, exactly?",
+      "file": "decision-001-core-protocol.html",
+      "options": {
+        "A": "Latent-decision engine",
+        "B": "Double diamond \u2014 frame, then solve",
+        "C": "Adversarial panel",
+        "D": "Question-first scaffold"
+      },
+      "recommended": "B",
+      "status": "chosen",
+      "chosen": "B",
+      "reasoning": null
+    },
+    {
+      "id": "decision-002",
+      "title": "Depth calibration",
+      "file": "decision-002-depth-calibration.html",
+      "status": "chosen",
+      "question": "How does the skill decide how much thinking a task deserves?",
+      "options": {
+        "A": "Model self-selects, no ceremony",
+        "B": "User flags only",
+        "C": "Scored triage + mid-task escalation",
+        "D": "Always full protocol"
+      },
+      "recommended": "C",
+      "chosen": "C",
+      "reasoning": null
+    },
+    {
+      "id": "decision-003",
+      "title": "Human-in-the-loop dial",
+      "file": "decision-003-hitl-dial.html",
+      "status": "chosen",
+      "question": "How does the human get into (and out of) the loop?",
+      "options": {
+        "A": "Binary toggle",
+        "B": "Three-position dial (off|review|full)",
+        "C": "Adaptive interrupts",
+        "D": "Interactive default, --auto opt-out"
+      },
+      "recommended": "B",
+      "chosen": "B",
+      "reasoning": null
+    },
+    {
+      "id": "decision-004",
+      "title": "Thinking artifacts",
+      "file": "decision-004-thinking-artifacts.html",
+      "status": "chosen",
+      "question": "What does the thinking leave behind?",
+      "options": {
+        "A": "No artifact",
+        "B": "Reasoning appendix in the response",
+        "C": "Machine trace always, views on demand",
+        "D": "Full decision-kit artifacts always"
+      },
+      "recommended": "C",
+      "chosen": "C",
+      "reasoning": null
+    },
+    {
+      "id": "decision-005",
+      "title": "Portability",
+      "file": "decision-005-portability.html",
+      "status": "chosen",
+      "question": "What does 'improves any model's thinking' mean concretely?",
+      "options": {
+        "A": "Claude Code first, port later",
+        "B": "Standard-conformant, host-neutral skill",
+        "C": "Protocol document first",
+        "D": "Builder layer: system prompt + API recipe"
+      },
+      "recommended": "B",
+      "chosen": "B",
+      "reasoning": null
+    },
+    {
+      "id": "decision-006",
+      "title": "Repo & positioning",
+      "file": "decision-006-repo-positioning.html",
+      "status": "chosen",
+      "question": "Where does /be-smarter live, and what is it to decision-kit?",
+      "options": {
+        "A": "Inside decision-kit",
+        "B": "Sibling repo: jnemargut/be-smarter",
+        "C": "Umbrella org for a kit family",
+        "D": "Fork decision-kit and trim"
+      },
+      "recommended": "B",
+      "chosen": "B",
+      "reasoning": "Sibling repo. Constraints for implementation: write the repo in a tone similar to decision-kit, and do not use em-dashes anywhere in the repo prose."
+    },
+    {
+      "id": "decision-007",
+      "title": "Elevator pitch",
+      "question": "The 30-second version",
+      "file": "decision-007-elevator-pitch.html",
+      "options": {
+        "A": "Method-first (the anchoring story)",
+        "B": "Origin-first (the decision-kit story)",
+        "C": "Family-first (the two-sentence split)",
+        "D": "Outcome-first (the promise)"
+      },
+      "recommended": "A",
+      "status": "chosen",
+      "chosen": "A",
+      "reasoning": null
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 1 — Core Thinking Protocol</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --yellow:#fbbf24; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .section-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:48px 0 16px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .research { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; }
+  .research ul { list-style:none; }
+  .research li { padding:10px 0; border-bottom:1px solid var(--border); font-size:15px; }
+  .research li:last-child { border-bottom:none; }
+  .research b { color:var(--ink); }
+  .research .src { color:var(--accent); font-size:13px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:20px; margin-bottom:8px; }
+  .option .sub { color:var(--muted); font-size:14px; margin-bottom:18px; }
+  .flow { background:var(--card2); border-radius:10px; padding:16px; margin-bottom:18px; }
+  .step { display:flex; gap:10px; align-items:flex-start; padding:6px 0; font-size:13.5px; color:var(--muted); }
+  .step .n { width:22px; height:22px; line-height:22px; text-align:center; border-radius:6px; background:#0e0e16; color:var(--accent); font-weight:700; font-size:11px; flex-shrink:0; }
+  .step .div { color:var(--yellow); font-weight:700; font-size:10px; text-transform:uppercase; letter-spacing:0.06em; border:1px solid var(--yellow); border-radius:4px; padding:0 5px; margin-left:6px; }
+  .step .con { color:var(--green); font-weight:700; font-size:10px; text-transform:uppercase; letter-spacing:0.06em; border:1px solid var(--green); border-radius:4px; padding:0 5px; margin-left:6px; }
+  .pros-cons { font-size:14px; }
+  .pros-cons p { margin:6px 0; }
+  .pro::before { content:"+ "; color:var(--green); font-weight:700; }
+  .con::before { content:"− "; color:var(--red); font-weight:700; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  th { background:var(--card2); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+  td:first-child { color:var(--muted); font-weight:600; }
+  .good { color:var(--green); } .mid { color:var(--yellow); } .bad { color:var(--red); }
+  .reccol { background:rgba(108,99,255,0.07); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Decision 1 of 6 · The Method</div>
+  <h1>What is the thinking protocol, exactly?</h1>
+  <p class="lede">Strip away decision-kit's domain skills and HTML pages, and what's left is a thinking method. This decision defines it precisely — the phases the model walks through on any task. Everything else (depth, HITL, artifacts, portability) hangs off this.</p>
+
+  <div class="section-title">Research Context</div>
+  <div class="research">
+    <ul>
+      <li><b>Divergent→convergent is a studied, effective strategy — not just a vibe.</b> Decomposing into "a divergent phase that explores the space freely, then a convergent phase that refines selections" measurably improves GPT-4 problem-solving (self-reflection −9.7% infeasible solutions; divergent-convergent +6.5% efficient solutions). <span class="src">arXiv 2512.23601, MacGyver benchmark</span></li>
+      <li><b>Multi-agent debate is the strongest divergence mechanism on record</b> — independent perspectives that argue break the "degeneration of thought" failure where a model anchors on its first idea and merely defends it. Cost is proportional to the number of debaters. <span class="src">arXiv 2305.19118 (MAD)</span></li>
+      <li><b>More thinking is not monotonically better.</b> Accuracy follows an inverted-U with reasoning length; long chains accumulate errors and models abandon correct answers ("overthinking"). The protocol needs convergence discipline as much as divergence breadth. <span class="src">arXiv 2502.07266, 2410.21333, OptimalThinkingBench</span></li>
+      <li><b>Brute-force divergence is losing its edge.</b> Self-consistency (sample 10 chains, vote) gains only 0.4–1.6% on frontier models while cost scales linearly. Structured divergence — different framings, different perspectives — beats more samples of the same thought. <span class="src">arXiv 2511.00751</span></li>
+      <li><b>Practitioners value the framing phase most.</b> The most-loved part of Superpowers' brainstorming skill is that it "pressure-tests assumptions using first principles" and challenges the problem statement before any solution work. Solving the wrong problem well is the failure no amount of solution-space thinking fixes. <span class="src">Superpowers plugin, codeminer42 field report</span></li>
+      <li><b>Decision-kit's own evidence:</b> auto-picked runs still produce better output — because generating 4 real options with tradeoffs forces structured evaluation even when the human rubber-stamps the recommendation. The decision-with-options is a proven unit of thought.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">Options</div>
+  <div class="options">
+
+    <div class="option">
+      <div class="opt-letter">A</div>
+      <h3>Latent-decision engine</h3>
+      <p class="sub">Decision-kit distilled, framing skipped: every task contains 3–7 latent decisions. Find them, generate 4 genuinely different options each, weigh tradeoffs, pick with stated reasoning, execute.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Excavate the latent decisions in the task</div>
+        <div class="step"><span class="n">2</span>4 options per decision <span class="div">diverge</span></div>
+        <div class="step"><span class="n">3</span>Tradeoff table per decision</div>
+        <div class="step"><span class="n">4</span>Pick + reasoning <span class="con">converge</span></div>
+        <div class="step"><span class="n">5</span>Execute on the picks</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Purest port of what decision-kit already proved works</p>
+        <p class="pro">Naturally headless — picks + reasoning need no human</p>
+        <p class="con">Accepts the task as framed — the wrong-problem failure mode survives</p>
+        <p class="con">Decision framing is awkward for some tasks (debugging, summarizing)</p>
+      </div>
+    </div>
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">B</div>
+      <h3>Double diamond — frame, then solve</h3>
+      <p class="sub">Two diverge→converge passes. Diamond 1 (problem space): question the framing — what's actually being asked, what would an expert ask, which assumptions are load-bearing — and converge on the real problem + success criteria. Diamond 2 (solution space): run A's decision-option-tradeoff mechanics, converge, execute.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Framings, expert questions, assumptions <span class="div">diverge</span></div>
+        <div class="step"><span class="n">2</span>The real problem + success criteria <span class="con">converge</span></div>
+        <div class="step"><span class="n">3</span>Latent decisions → options + tradeoffs <span class="div">diverge</span></div>
+        <div class="step"><span class="n">4</span>Picks + reasoning, checked against criteria <span class="con">converge</span></div>
+        <div class="step"><span class="n">5</span>Execute, verify against the criteria from step 2</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Catches the wrong-problem failure A can't — the phase practitioners value most</p>
+        <p class="pro">Subsumes A: its mechanics power the second diamond</p>
+        <p class="pro">Step-2 criteria give convergence a measurable target (overthinking guard)</p>
+        <p class="con">Two diamonds on a trivial task is overkill — leans hard on Decision 2 (depth calibration)</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">C</div>
+      <h3>Adversarial panel</h3>
+      <p class="sub">Divergence through disagreement: spin up 3+ perspectives (skeptic, domain expert, user advocate — or task-appropriate personas) that independently attack the task, debate, and a synthesis pass converges on what survives.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>Cast 3+ perspectives for this task</div>
+        <div class="step"><span class="n">2</span>Independent takes <span class="div">diverge</span></div>
+        <div class="step"><span class="n">3</span>Debate round — attack each other's takes</div>
+        <div class="step"><span class="n">4</span>Synthesis of what survived <span class="con">converge</span></div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Strongest anti-anchoring mechanism in the literature (MAD)</p>
+        <p class="pro">Maps naturally onto subagents when the host supports them</p>
+        <p class="con">Heaviest token cost; diminishing returns on frontier models for routine tasks</p>
+        <p class="con">Needs host features (or verbose role-play) — hurts the portability goal</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Question-first scaffold</h3>
+      <p class="sub">The lightest protocol: generate the questions an expert would ask before answering, answer them honestly (including "I don't know"), keep an assumptions ledger, then one converge pass produces the answer.</p>
+      <div class="flow">
+        <div class="step"><span class="n">1</span>What would an expert ask first? <span class="div">diverge</span></div>
+        <div class="step"><span class="n">2</span>Answer each; log assumptions + unknowns</div>
+        <div class="step"><span class="n">3</span>Answer the task, citing the ledger <span class="con">converge</span></div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Cheapest; near-zero overthinking risk; trivially portable</p>
+        <p class="pro">Self-ask is a proven standalone technique</p>
+        <p class="con">No structured option generation — tradeoff thinking (the kit's core move) is optional, not forced</p>
+        <p class="con">Closest to what good models already do; least differentiation</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Comparison</div>
+  <table>
+    <tr><th>Dimension</th><th>A · Decision engine</th><th class="reccol">B · Double diamond ★</th><th>C · Adversarial panel</th><th>D · Question-first</th></tr>
+    <tr><td>Catches wrong-problem framing</td><td class="bad">No</td><td class="reccol good">Yes — diamond 1's job</td><td class="mid">Sometimes, via debate</td><td class="mid">Partially, via questions</td></tr>
+    <tr><td>Forces tradeoff thinking</td><td class="good">Yes — core mechanic</td><td class="reccol good">Yes — diamond 2</td><td class="mid">Implicit in debate</td><td class="bad">Optional</td></tr>
+    <tr><td>Convergence discipline</td><td class="good">Pick + reasoning</td><td class="reccol good">Pick checked against criteria</td><td class="mid">Synthesis can waffle</td><td class="good">Single pass</td></tr>
+    <tr><td>Token cost</td><td class="mid">Medium</td><td class="reccol mid">Medium-high</td><td class="bad">Highest</td><td class="good">Lowest</td></tr>
+    <tr><td>Overthinking risk</td><td class="mid">Medium</td><td class="reccol mid">Medium — needs depth calibration</td><td class="bad">High</td><td class="good">Low</td></tr>
+    <tr><td>Works headless (no human)</td><td class="good">Yes</td><td class="reccol good">Yes</td><td class="good">Yes</td><td class="good">Yes</td></tr>
+    <tr><td>Decision-kit DNA fidelity</td><td class="good">Purest</td><td class="reccol good">High — kit mechanics inside</td><td class="mid">Different lineage</td><td class="bad">Thin</td></tr>
+    <tr><td>Generalizes across task types</td><td class="mid">Awkward for non-decision tasks</td><td class="reccol good">Framing phase absorbs any task</td><td class="good">Any task</td><td class="good">Any task</td></tr>
+  </table>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code> — or add <code>because…</code> / <code>but…</code>, ask for <code>more options</code>, or describe your own protocol.<br><br>
+    Recommendation: <b style="color:var(--ink)">B</b>. It keeps decision-kit's proven decision-option-tradeoff engine but wraps it in the framing pass that catches the one failure that engine can't — solving the wrong problem. C's debate move can live inside diamond 2 as an optional escalation for genuinely hard calls; D is what the protocol collapses to at minimum depth (Decision 2's territory).
+  </div>
+</div>
+</body>
+</html>

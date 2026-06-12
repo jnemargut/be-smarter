@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision 3 — Human-in-the-Loop Dial</title>
+<style>
+  :root { --bg:#0a0a0f; --card:#13131c; --card2:#1a1a26; --ink:#e8e8f0; --muted:#9a9ab0; --accent:#6c63ff; --green:#4ade80; --yellow:#fbbf24; --red:#f87171; --border:#26263a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height:1.6; padding:48px 24px; }
+  .wrap { max-width:1100px; margin:0 auto; }
+  .kicker { color:var(--accent); font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:8px; }
+  h1 { font-size:34px; line-height:1.2; margin-bottom:12px; }
+  .lede { color:var(--muted); font-size:17px; max-width:760px; margin-bottom:40px; }
+  .context { background:rgba(108,99,255,0.08); border:1px solid var(--accent); border-radius:10px; padding:14px 20px; font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .context b { color:var(--ink); }
+  .section-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin:48px 0 16px; border-bottom:1px solid var(--border); padding-bottom:8px; }
+  .research { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; }
+  .research ul { list-style:none; }
+  .research li { padding:10px 0; border-bottom:1px solid var(--border); font-size:15px; }
+  .research li:last-child { border-bottom:none; }
+  .research b { color:var(--ink); }
+  .research .src { color:var(--accent); font-size:13px; }
+  .options { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .option { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:26px; position:relative; }
+  .option.rec { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent), 0 8px 32px rgba(108,99,255,0.15); }
+  .rec-badge { position:absolute; top:-12px; right:20px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:99px; }
+  .opt-letter { display:inline-block; width:32px; height:32px; line-height:32px; text-align:center; background:var(--card2); border:1px solid var(--border); border-radius:8px; font-weight:700; color:var(--accent); margin-bottom:12px; }
+  .option h3 { font-size:20px; margin-bottom:8px; }
+  .option .sub { color:var(--muted); font-size:14px; margin-bottom:18px; }
+  .dial { background:var(--card2); border-radius:10px; padding:16px; margin-bottom:18px; font-size:13px; color:var(--muted); }
+  .pos { display:flex; gap:10px; padding:5px 0; align-items:baseline; }
+  .pos .p { font-family:ui-monospace, monospace; color:var(--accent); font-weight:700; min-width:80px; }
+  .pros-cons { font-size:14px; }
+  .pros-cons p { margin:6px 0; }
+  .pro::before { content:"+ "; color:var(--green); font-weight:700; }
+  .con::before { content:"− "; color:var(--red); font-weight:700; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; font-size:14px; }
+  th, td { padding:12px 14px; text-align:left; border-bottom:1px solid var(--border); }
+  th { background:var(--card2); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); }
+  td:first-child { color:var(--muted); font-weight:600; }
+  .good { color:var(--green); } .mid { color:var(--yellow); } .bad { color:var(--red); }
+  .reccol { background:rgba(108,99,255,0.07); }
+  .footer { margin-top:48px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:24px 28px; color:var(--muted); font-size:14px; }
+  .footer code { background:var(--card2); padding:2px 8px; border-radius:6px; color:var(--ink); font-size:13px; }
+  @media (max-width:800px){ .options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Decision 3 of 6 · The Dial</div>
+  <h1>How does the human get into (and out of) the loop?</h1>
+  <p class="lede">Decision-kit is interactive by default — that's its identity and, per your framing, its adoption tax. /be-smarter inverts the premise: "most folks just want the model to be smarter." So headless is the default, and this decision designs the argument that lets a human step in.</p>
+  <div class="context"><b>Builds on Decisions 1–2:</b> the double diamond has two natural pause points (converge on framing, converge on picks), and the triage score from Decision 2 gives any adaptive variant a stakes signal for free.</div>
+
+  <div class="section-title">Research Context</div>
+  <div class="research">
+    <ul>
+      <li><b>Production HITL practice converges on three modes:</b> approval gates at defined points, escalation on uncertainty/risk, and post-action audit trails. Most real systems need all three — a single on/off toggle is below the floor of current practice. <span class="src">understandingdata.com HITL patterns, digitalapplied 2026 escalation guide</span></li>
+      <li><b>Escalation thresholds should depend on risk tier and context, not a global setting</b> — stricter in high-stakes domains, looser in low-stakes ones, tuned over time. The triage score from Decision 2 is exactly this signal, already computed. <span class="src">Anna Jey, production HITL patterns (Medium)</span></li>
+      <li><b>Pauses must not lose state.</b> The interrupt pattern is checkpoint → wait → resume from checkpoint, never re-run from scratch. For a thinking skill: whatever was diverged/converged before the pause must survive the human's response verbatim. <span class="src">Redis HITL production patterns</span></li>
+      <li><b>Decision-kit already shipped both proven interaction shapes.</b> /autodecide's batch-review (run everything, pause once at the end, override by exception) and /state-your-case's circuit breaker (interrupt only when a judgment call is too important to decide silently). The dial doesn't need inventing — it needs assembling.</li>
+      <li><b>Reviewer fatigue is the documented failure of always-on approval.</b> Humans rubber-stamp when asked too often ("automation complacency") — pause points must be few and high-value, or the loop becomes theater. <span class="src">strata.io HITL oversight guide</span></li>
+    </ul>
+  </div>
+
+  <div class="section-title">Options</div>
+  <div class="options">
+
+    <div class="option">
+      <div class="opt-letter">A</div>
+      <h3>Binary toggle</h3>
+      <p class="sub"><code style="background:#1a1a26;padding:1px 6px;border-radius:4px">--human</code> on or off. Off (default): fully headless. On: pause at both converge points with full decision pages, decision-kit style.</p>
+      <div class="dial">
+        <div class="pos"><span class="p">off</span>headless, end-to-end</div>
+        <div class="pos"><span class="p">--human</span>pause at framing + at picks, pages rendered</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Simplest to spec, document, and understand</p>
+        <p class="pro">Matches the user's literal ask ("a human in the loop argument")</p>
+        <p class="con">No middle ground — it's rubber-stamp-everything or trust-everything</p>
+        <p class="con">Below the three-mode floor of current HITL practice</p>
+      </div>
+    </div>
+
+    <div class="option rec">
+      <div class="rec-badge">★ Recommended</div>
+      <div class="opt-letter">B</div>
+      <h3>Three-position dial</h3>
+      <p class="sub"><code style="background:#1a1a26;padding:1px 6px;border-radius:4px">--human=off|review|full</code>. Off (default): headless. Review: run the whole protocol autonomously, pause once at the end with a batch-review of every call made — override by exception (the /autodecide pattern). Full: pause at the two converge points.</p>
+      <div class="dial">
+        <div class="pos"><span class="p">off</span>headless; trace logged (Decision 4's artifact)</div>
+        <div class="pos"><span class="p">review</span>one pause at the end; "looks good" or "for X I want Y"</div>
+        <div class="pos"><span class="p">full</span>pause at framing converge + picks converge</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Review is the sweet spot: human judgment without blocking the thinking</p>
+        <p class="pro">Both interactive positions reuse decision-kit's proven UX patterns verbatim</p>
+        <p class="pro">Few, high-value pauses — respects the reviewer-fatigue finding</p>
+        <p class="con">Three positions to document and test instead of two</p>
+        <p class="con">Fixed positions — can't say "only bother me if it matters"</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">C</div>
+      <h3>Adaptive interrupts</h3>
+      <p class="sub">No positions — the model pulls the human in only when it matters: triage score above threshold, a tripwire fires, or options converge too close to call. <code style="background:#1a1a26;padding:1px 6px;border-radius:4px">--interrupt-at=8</code> tunes the threshold. /state-your-case as the default interaction model.</p>
+      <div class="dial">
+        <div class="pos"><span class="p">silent</span>most tasks: no interruption at all</div>
+        <div class="pos"><span class="p">⚡ interrupt</span>stakes ≥ threshold or tripwire → checkpoint, ask, resume</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">"Only bother me when it matters" — the ideal for busy users</p>
+        <p class="pro">Triage score makes the threshold context-aware for free</p>
+        <p class="con">Unpredictable: users can't know in advance whether they'll be interrupted</p>
+        <p class="con">Trust must be earned — a misfiring threshold (either direction) sours v1 adoption</p>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="opt-letter">D</div>
+      <h3>Interactive default, --auto to opt out</h3>
+      <p class="sub">Decision-kit parity: the human is in the loop unless they say otherwise. Preserves the kit's judgment-first philosophy in the new skill.</p>
+      <div class="dial">
+        <div class="pos"><span class="p">default</span>pause at converge points with pages</div>
+        <div class="pos"><span class="p">--auto</span>headless</div>
+      </div>
+      <div class="pros-cons">
+        <p class="pro">Philosophically continuous with decision-kit's decision gate</p>
+        <p class="con">Contradicts the founding premise — "most folks just want the model to be smarter"</p>
+        <p class="con">Kills always-on usage; re-imports the adoption tax this project exists to remove</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Comparison</div>
+  <table>
+    <tr><th>Dimension</th><th>A · Binary</th><th class="reccol">B · Three-position ★</th><th>C · Adaptive</th><th>D · Interactive default</th></tr>
+    <tr><td>Matches "just be smarter" default</td><td class="good">Yes</td><td class="reccol good">Yes</td><td class="good">Yes</td><td class="bad">No</td></tr>
+    <tr><td>Human judgment without blocking</td><td class="bad">No middle mode</td><td class="reccol good">Review position</td><td class="good">When it matters</td><td class="bad">Always blocks</td></tr>
+    <tr><td>Predictability</td><td class="good">Total</td><td class="reccol good">Total</td><td class="bad">Low — interrupts surprise</td><td class="good">Total</td></tr>
+    <tr><td>Reviewer-fatigue risk</td><td class="mid">High in --human</td><td class="reccol good">Low — batched</td><td class="good">Lowest</td><td class="bad">Highest</td></tr>
+    <tr><td>Reuses decision-kit UX</td><td class="mid">Full mode only</td><td class="reccol good">autodecide + full both</td><td class="good">state-your-case</td><td class="good">Core flow</td></tr>
+    <tr><td>Spec/v1 complexity</td><td class="good">Lowest</td><td class="reccol mid">Medium</td><td class="bad">Highest — thresholds to tune</td><td class="good">Low</td></tr>
+    <tr><td>Leverages D2 triage signal</td><td class="bad">No</td><td class="reccol mid">Not yet (C can bolt on)</td><td class="good">Core mechanism</td><td class="bad">No</td></tr>
+  </table>
+
+  <div class="footer">
+    <b style="color:var(--ink)">How to respond:</b> Reply with <code>Option A</code>, <code>B</code>, <code>C</code>, or <code>D</code> — or add <code>because…</code> / <code>but…</code>, ask for <code>more options</code>, or describe your own approach.<br><br>
+    Recommendation: <b style="color:var(--ink)">B</b>. The review position is the genuinely new value — full human judgment, zero blocking — and both interactive positions are battle-tested decision-kit UX. C is the right v2: once the triage rubric has earned trust, <code>--human=auto</code> becomes a fourth dial position using the same threshold machinery. Designing B's spec so C can slot in later costs nothing now.
+  </div>
+</div>
+</body>
+</html>
